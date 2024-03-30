@@ -1,12 +1,10 @@
 import time
-from typing import List, Tuple
 
 from matrices import *
 from weapon import *
 
-def simulate_ranik(sims: int, weapons: List[Weapon], curse_percentage=0.0, num_attacks=1):
-    ability = 3
-    proficiency = 2
+
+def simulate_ranik(sims: int, ability: int, proficiency: int, weapons: List[Weapon], curse_percentage=0.0):
     _results = []
 
     print(f"Raniks curse uptime: {curse_percentage:.0%}")
@@ -18,34 +16,33 @@ def simulate_ranik(sims: int, weapons: List[Weapon], curse_percentage=0.0, num_a
         weapon_results = []
 
         for _ in range(sims):
-            for __ in range(num_attacks):
-                crit = False
-                attack = random.randint(1, 20)
-                _attack = attack + ability + proficiency + weapon.atk_mod()
+            crit = False
+            attack = random.randint(1, 20)
+            _attack = attack + ability + proficiency + weapon.atk_mod()
 
-                if random.random() < curse_percentage:
-                    if attack >= 19:
-                        crit = True
-                        _num_crits += 1
-                    _damage = weapon.damage_roll(crit) + ability + proficiency  # pact weapon + cursed target add prof to dmg
-                else:
-                    if attack >= 20:
-                        crit = True
-                        _num_crits += 1
-                    _damage = weapon.damage_roll(crit) + ability  # pact weapon
+            if random.random() < curse_percentage:
+                if attack >= 19:
+                    crit = True
+                    _num_crits += 1
+                _damage = weapon.damage_roll(
+                    crit) + ability + proficiency  # pact weapon + cursed target add prof to dmg
+            else:
+                if attack >= 20:
+                    crit = True
+                    _num_crits += 1
+                _damage = weapon.damage_roll(crit) + ability  # pact weapon
 
-                weapon_results.append((_attack, _damage, crit))
-                _attack_total += _attack
-                _damage_total += _damage
+            weapon_results.append((_attack, _damage, crit))
+            _attack_total += _attack
+            _damage_total += _damage
 
         _results.append((weapon, pd.DataFrame.from_records(weapon_results, columns=['attack', 'damage', 'crit'])))
 
     return _results
 
 
-def simulate_solas(sims: int, weapons: List[Weapon], num_attacks: int = 1) -> List[Tuple[Weapon, pd.DataFrame]]:
-    ability = 2
-    proficiency = 2
+def simulate_solas(sims: int, ability: int, proficiency: int, weapons: List[Weapon]) -> List[
+    Tuple[Weapon, pd.DataFrame]]:
     other_dmg = 2
     _results = []
 
@@ -56,28 +53,25 @@ def simulate_solas(sims: int, weapons: List[Weapon], num_attacks: int = 1) -> Li
         weapon_results = []
 
         for _ in range(sims):
-            for __ in range(num_attacks):
-                crit = False
+            crit = False
 
-                attack_roll = random.randint(1, 20)
-                _attack = attack_roll + ability + proficiency + weapon.atk_mod()
-                if attack_roll >= 20:
-                    crit = True
-                    _num_crits += 1
-                _damage = weapon.damage_roll(crit) + ability + other_dmg
+            attack_roll = random.randint(1, 20)
+            _attack = attack_roll + ability + proficiency + weapon.atk_mod()
+            if attack_roll >= 20:
+                crit = True
+                _num_crits += 1
+            _damage = weapon.damage_roll(crit) + ability + other_dmg
 
-                weapon_results.append((_attack, _damage, crit))
-                _attack_total += _attack
-                _damage_total += _damage
+            weapon_results.append((_attack, _damage, crit))
+            _attack_total += _attack
+            _damage_total += _damage
 
         _results.append((weapon, pd.DataFrame.from_records(weapon_results, columns=['attack', 'damage', 'crit'])))
 
     return _results
 
 
-def simulate_daruth(sims: int, weapons: List[Weapon], num_attacks=1):
-    ability = 4
-    proficiency = 2
+def simulate_daruth(sims: int, ability: int, proficiency: int, weapons: List[Weapon]):
     _results = []
 
     for weapon in weapons:
@@ -87,63 +81,69 @@ def simulate_daruth(sims: int, weapons: List[Weapon], num_attacks=1):
         weapon_results = []
 
         for _ in range(sims):
-            for __ in range(num_attacks):
-                crit = False
-                attack_roll = random.randint(1, 20)
-                _attack = attack_roll + ability + proficiency + weapon.atk_mod()
+            crit = False
+            attack_roll = random.randint(1, 20)
+            _attack = attack_roll + ability + proficiency + weapon.atk_mod()
 
-                if attack_roll >= 20:
-                    crit = True
-                    _num_crits += 1
-                _damage = weapon.damage_roll(crit) + ability
+            if attack_roll >= 20:
+                crit = True
+                _num_crits += 1
+            _damage = weapon.damage_roll(crit) + ability
 
-                weapon_results.append((_attack, _damage, crit))
-                _attack_total += _attack
-                _damage_total += _damage
+            weapon_results.append((_attack, _damage, crit))
+            _attack_total += _attack
+            _damage_total += _damage
 
         _results.append((weapon, pd.DataFrame.from_records(weapon_results, columns=['attack', 'damage', 'crit'])))
 
     return _results
 
-HEADER = "{0:45}{1:>10}{2:>10}{3:>10}".format(f"Name", "Attack", "Damage", "Crit %")
-TEMPLATE = "{0:45}{1:>10.1f}{2:>10.1f}{3:>10.1%}"
+
+HEADER = "{0:55}{1:>10}{2:>10}{3:>10}".format(f"Name", "Attack", "Damage", "Crit %")
+TEMPLATE = "{0:55}{1:>10.1f}{2:>10.1f}{3:>10.1%}"
 
 
 def print_results(name, attacks, damage, crits):
     print(TEMPLATE.format(name, attacks, damage, crits))
 
+
 def ranik():
     raniks_weapons = [
-        battleaxe,
-        battleaxe_2h,
+        # battleaxe,
+        # battleaxe_2h,
         flametongue
     ]
-    num_attacks = 1
-    results = simulate_ranik(SIMS, raniks_weapons, curse_percentage=0.4)
+    num_attacks = 2
+    results = simulate_ranik(SIMS, ability=3, proficiency=3, weapons=raniks_weapons, curse_percentage=0.5)
     for weapon, result in results:
-        print_results(f"Ranik's {weapon}", result['attack'].mean(), result['damage'].mean(),
-                      result['crit'].sum() / (SIMS * num_attacks))
+        print_results(f"Ranik's {weapon}", result['attack'].mean(), result['damage'].mean() * num_attacks,
+                      result['crit'].sum() / SIMS)
         # show_matrices(result)
+
 
 def solas():
     solas_weapons = [
-        longsword,
+        # longsword,
         flametongue
     ]
-    num_attacks = 1
-    results = simulate_solas(SIMS, solas_weapons, num_attacks)
+    num_attacks = 2
+    results = simulate_solas(SIMS, ability=2, proficiency=3, weapons=solas_weapons)
     for weapon, result in results:
-        print_results(f"Solas' {weapon}", result['attack'].mean(), result['damage'].mean(), result['crit'].sum() / (SIMS * num_attacks))
+        print_results(f"Solas' {weapon}", result['attack'].mean(), result['damage'].mean() * num_attacks,
+                      result['crit'].sum() / SIMS)
         # show_matrices(result)
+
 
 def daruth():
     daruths_weapons = [
-        monk_hand
+        # monk_hand,
+        d_flametongue
     ]
-    num_attacks = 1
-    results = simulate_daruth(SIMS, daruths_weapons)
+    num_attacks = 2
+    results = simulate_daruth(SIMS, ability=4, proficiency=3, weapons=daruths_weapons)
     for weapon, result in results:
-        print_results(f"Daruth's {weapon}", result['attack'].mean(), result['damage'].mean(), result['crit'].sum() / (SIMS * num_attacks))
+        print_results(f"Daruth's {weapon}", result['attack'].mean(), result['damage'].mean() * num_attacks,
+                      result['crit'].sum() / SIMS)
         # show_matrices(result)
 
 
@@ -157,4 +157,4 @@ if __name__ == "__main__":
     solas()
     daruth()
 
-    print(f"Time: {time.perf_counter()-start:.1f}s")
+    print(f"Time: {time.perf_counter() - start:.1f}s")
