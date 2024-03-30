@@ -69,15 +69,14 @@ def summarize_damage_matrix(matrix: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def show_matrices(results: List[Tuple[Weapon, pd.DataFrame]]):
-    for weapon, result in results:
-        attack_matrix, damage_matrix = compute_matrices(result)
-        pd.options.display.float_format = '{:.2f}'.format
-        summary = summarize_attack_matrix(attack_matrix).join(summarize_damage_matrix(damage_matrix))
-        summary.index.name = 'AC'
-        output = summary.reset_index().to_string(index=False, formatters={
-            'hit %': '{:.1%}'.format,
-            'avg dmg': '{:.1f}'.format,
-        })
+def show_matrices(result: pd.DataFrame):
+    attack_matrix, damage_matrix = compute_matrices(result)
+    pd.options.display.float_format = '{:.2f}'.format
+    summary = summarize_attack_matrix(attack_matrix).join(summarize_damage_matrix(damage_matrix))
+    summary.index.name = 'AC'
+    output = summary.reset_index().to_string(index=False, formatters={
+        'hit %': '{:.1%}'.format,
+        'avg dmg': '{:.1f}'.format,
+    })
 
-        print(output)
+    print(output)
