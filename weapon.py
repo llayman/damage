@@ -111,3 +111,9 @@ class SimpleWeapon(Weapon):
             xtra = f" + ({self.xtra_num_rolls}d{self.xtra_die}{xtra_mod})"
 
         return f"{self.name} ({self.num_rolls}d{self.die}{mod}){xtra}"
+
+battleaxe = SimpleWeapon("battleaxe", num_rolls=1, die=8, dmg_modifier=1)
+battleaxe_2h = SimpleWeapon("battleaxe (2h)", num_rolls=1, die=10, dmg_modifier=1)
+flametongue = SimpleWeapon.from_dice("flametongue(?) scimitar", "1d6", "2d6")
+longsword = SimpleWeapon.from_dice("longsword", "1d8")
+monk_hand = SimpleWeapon.from_dice("monk hands", "1d6")

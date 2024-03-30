@@ -4,7 +4,6 @@ from typing import List, Tuple
 from matrices import *
 from weapon import *
 
-
 def simulate_ranik(sims: int, weapons: List[Weapon], curse_percentage=0.0, num_attacks=1):
     ability = 3
     proficiency = 2
@@ -113,19 +112,7 @@ TEMPLATE = "{0:45}{1:>10.1f}{2:>10.1f}{3:>10.1%}"
 def print_results(name, attacks, damage, crits):
     print(TEMPLATE.format(name, attacks, damage, crits))
 
-
-if __name__ == "__main__":
-    start = time.perf_counter()
-    SIMS = 100_000
-    print(f"{SIMS} sims")
-    print(HEADER)
-
-    battleaxe = SimpleWeapon("battleaxe", num_rolls=1, die=8, dmg_modifier=1)
-    battleaxe_2h = SimpleWeapon("battleaxe (2h)", num_rolls=1, die=10, dmg_modifier=1)
-    flametongue = SimpleWeapon.from_dice("flametongue(?) scimitar", "1d6", "2d6")
-    longsword = SimpleWeapon.from_dice("longsword", "1d8")
-    monk_hand = SimpleWeapon.from_dice("monk hands", "1d6")
-
+def ranik():
     raniks_weapons = [
         battleaxe,
         battleaxe_2h,
@@ -138,6 +125,7 @@ if __name__ == "__main__":
                       result['crit'].sum() / (SIMS * num_attacks))
         # show_matrices(result)
 
+def solas():
     solas_weapons = [
         longsword,
         flametongue
@@ -148,6 +136,7 @@ if __name__ == "__main__":
         print_results(f"Solas' {weapon}", result['attack'].mean(), result['damage'].mean(), result['crit'].sum() / (SIMS * num_attacks))
         # show_matrices(result)
 
+def daruth():
     daruths_weapons = [
         monk_hand
     ]
@@ -156,5 +145,16 @@ if __name__ == "__main__":
     for weapon, result in results:
         print_results(f"Daruth's {weapon}", result['attack'].mean(), result['damage'].mean(), result['crit'].sum() / (SIMS * num_attacks))
         # show_matrices(result)
+
+
+if __name__ == "__main__":
+    start = time.perf_counter()
+    SIMS = 100_000
+    print(f"{SIMS} sims")
+    print(HEADER)
+
+    ranik()
+    solas()
+    daruth()
 
     print(f"Time: {time.perf_counter()-start:.1f}s")
