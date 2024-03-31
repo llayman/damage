@@ -16,5 +16,5 @@ pip install -r requirements.txt
 # Tweaking
 - Character attacks and modifiers are customized in `damage.py` in functions with character names.
 - Add and edit weapons in `weapons.py`.
-- Uncomment the `compute_matrices()` calls to generate damage and attack tables vs. AC.
-- Reduce `SIMS` in `damage.py` to shorten runtime, particularly when computing matrices.
+- Comment/uncomment the `show_matrices()` calls to generate damage and attack tables vs. AC. Generating these significantly increases runtime for large `SIMS`
+- Reduce `SIMS` in `damage.py` to shorten runtime.
