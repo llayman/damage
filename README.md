@@ -13,8 +13,8 @@ pip install -r requirements.txt
 1. Ensure virtual environment is active by running `.venv/bin/activate`
 2. `python damage.py`
 
-Character attacks and modifiers are customized in `damage.py` in functions with character names.
-
-Weapons are defined in `weapons.py`. Add new ones there.
-
-Uncomment the `compute_matrices()` calls to generate damage and attack tables vs. AC.
+# Tweaking
+- Character attacks and modifiers are customized in `damage.py` in functions with character names.
+- Add and edit weapons in `weapons.py`.
+- Uncomment the `compute_matrices()` calls to generate damage and attack tables vs. AC.
+- Reduce `SIMS` in `damage.py` to shorten runtime, particularly when computing matrices.
